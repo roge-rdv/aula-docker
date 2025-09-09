@@ -17,10 +17,38 @@ app.get("/", (req, res) => {
   res.send("<h1>Hello Word</h1>")
 });
 
-app.get("/users", async (req, res) => {
+app.get("/api/v1/cliente", async (req, res) => {
   try {
     const connection = await mysql.createConnection(dbConfig);
-    const [rows] = await connection.execute("SELECT * FROM users");
+    const [rows] = await connection.execute("SELECT * FROM clientes");
+    await connection.end();
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/api/v1/cliente/:id", async (req, res) => {
+  try { 
+
+    const cliente = req.params.id;
+
+    const connection = await mysql.createConnection(dbConfig);
+    const [rows] = await connection.execute("SELECT * FROM clientes where id = ?", [cliente]);
+    await connection.end();
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete("/api/v1/cliente/:id", async (req, res) => {
+  try { 
+
+    const cliente = req.params.id;
+
+    const connection = await mysql.createConnection(dbConfig);
+    const [rows] = await connection.execute("delete * FROM clientes where id = ?", [cliente]);
     await connection.end();
     res.json(rows);
   } catch (err) {
