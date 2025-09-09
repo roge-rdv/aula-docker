@@ -40,12 +40,12 @@ Para rodar este projeto localmente, siga os passos abaixo:
 
 1.  Clone este repositório:
     ```bash
-    git clone [Link do seu repositório]
+    git clone https://github.com/roge-rdv/aula-docker
     ```
 
 2.  Acesse a pasta do projeto:
     ```bash
-    cd [Nome da pasta do projeto]
+    cd NEXTJS_APP
     ```
 
 3.  Instale as dependências:
