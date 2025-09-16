@@ -2,6 +2,9 @@ const express = require("express");
 const mysql = require("mysql2/promise");
 
 const app = express();
+
+app.use(express.json());
+
 const PORT = 3001;
 
 // Configuração do MySQL (igual ao docker-compose)
@@ -42,13 +45,34 @@ app.get("/api/v1/cliente/:id", async (req, res) => {
   }
 });
 
-app.delete("/api/v1/cliente/:id", async (req, res) => {
-  try { 
+app.post("/api/v1/cliente/", async (req, res) => {
+  try {
+    const cliente = req.body;
 
-    const cliente = req.params.id;
+    if (!cliente.email || !cliente.nome || !cliente.telefone) {
+      return res.status(400).json({ error: "Faltou algum parâmetro: email, nome e telefone são obrigatórios." });
+    }
 
     const connection = await mysql.createConnection(dbConfig);
-    const [rows] = await connection.execute("delete * FROM clientes where id = ?", [cliente]);
+    const [result] = await connection.execute("INSERT INTO clientes (email, telefone, nome) VALUES (?, ?, ?)", [cliente.email, cliente.telefone, cliente.nome]);
+    await connection.end();
+
+    res.status(201).json({
+      message: "Cliente criado com sucesso!",
+      affectedRows: result.affectedRows,
+      insertId: result.insertId
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete("/api/v1/cliente/:id", async (req, res) => {
+  try {
+    const clienteId = req.params.id;
+
+    const connection = await mysql.createConnection(dbConfig);
+    const [rows] = await connection.execute("DELETE FROM clientes WHERE id = ?", [clienteId]);
     await connection.end();
     res.json(rows);
   } catch (err) {
