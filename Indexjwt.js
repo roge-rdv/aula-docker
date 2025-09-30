@@ -1,20 +1,20 @@
 const express = require("express");
 const mysql = require("mysql2/promise");
-const mysql = require("mysql2/promise");
 const jwt = require("jsonwebtoken");
 
 const app = express();
+const PORT = 3001;
 
-app.use(express.json());
 
 const JWT_SECRET = "asdihoashdoiashdoiq1h8h0-18h081d081h0dh18idh0has0dih0asd"; // troque por algo seguro
 const API_KEY = "d190981dh0891h0dihasoidhoiwh01ihd01ihd"; // sua API key estática
 
-const PORT = 3001;
+app.use(express.json()); // For Express 4.16.0 and above 
 
-// Configuração do MySQL (igual ao docker-compose)
+
+//// Configuração do MySQL
 const dbConfig = {
-  host: "mysql",       // nome do serviço no docker-compose
+  host: "mysql",
   user: "appuser",
   password: "apppass",
   database: "appdb"
@@ -41,8 +41,7 @@ function authenticateJWT(req, res, next) {
 
 // Endpoint para gerar token usando API Key
 app.post("/auth", (req, res) => {
-  const { apiKey } = req.body; 
-  //   constb apiKey  = req.body.API_KEY;
+  const { apiKey } = req.body;
 
   if (apiKey !== API_KEY) {
     return res.status(403).json({ error: "API Key inválida" });
@@ -59,11 +58,6 @@ app.post("/auth", (req, res) => {
 // Página inicial
 app.get("/", (req, res) => {
   res.send("<h1>📖 API de Clientes com JWT + API Key</h1>");
-});
-
-app.get("/", (req, res) => {
-  //res.json({ message: "Node.js está rodando no Docker!" });
-  res.send("<h1>Hello Word</h1>")
 });
 
 // Listar clientes (protegido com JWT)
