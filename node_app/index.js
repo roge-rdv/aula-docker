@@ -1,7 +1,7 @@
-const express = require("express");
-const mysql = require("mysql2/promise");
-const mysql = require("mysql2/promise");
-const jwt = require("jsonwebtoken");
+import express from "express";
+import mysql from "mysql2/promise";
+import jwt from "jsonwebtoken"
+import cors  from "cors"
 
 const app = express();
 
@@ -10,6 +10,7 @@ app.use(express.json());
 const JWT_SECRET = "asdihoashdoiashdoiq1h8h0-18h081d081h0dh18idh0has0dih0asd"; // troque por algo seguro
 const API_KEY = "d190981dh0891h0dihasoidhoiwh01ihd01ihd"; // sua API key estática
 
+app.use(cors());
 const PORT = 3001;
 
 // Configuração do MySQL (igual ao docker-compose)
